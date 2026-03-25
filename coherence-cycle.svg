@@ -12,13 +12,17 @@
   </defs>
 
   <style>
-    /* 24s loop — AI Readiness is entry, then 4-step cycle repeats
-       Stage 1  AI Readiness       0-4s     0%-16.7%
-       Stage 2  Measure            4-8s    16.7%-33.3%
-       Stage 3  Detect             8-13s   33.3%-54.2%
-       Stage 4  Resolve           13-18s   54.2%-75%
-       Stage 5  Implement         18-22s   75%-91.7%
-       Stage 6  Repeat/pause      22-24s   91.7%-100% */
+    /* 48s loop — two scenarios, each 24s
+       Scenario 1 (0-24s): Observability decoherence (alert fired)
+       Scenario 2 (24-48s): Spec changed (new requirements)
+
+       Phase timing per scenario:
+       AI Readiness  0-3s / 24-27s     (0-6.25% / 50-56.25%)
+       Measure       3-7s / 27-31s     (6.25-14.6% / 56.25-64.6%)
+       Detect        7-12s / 31-36s    (14.6-25% / 64.6-75%)
+       Resolve       12-17s / 36-41s   (25-35.4% / 75-85.4%)
+       Implement     17-21s / 41-45s   (35.4-43.75% / 85.4-93.75%)
+       Pause         21-24s / 45-48s   (43.75-50% / 93.75-100%) */
 
     text{font-family:'Helvetica Neue',Arial,sans-serif}
     .node-circle{fill:#1a2233;stroke-width:2}
@@ -26,81 +30,167 @@
     .node-icon{text-anchor:middle;font-weight:400}
     .path-label{font-size:11px;fill:#aabbcc;text-anchor:middle}
 
-    /* ---- AI READINESS (entry, outside cycle) ---- */
-    @keyframes aiEntry{0%{opacity:0}2%{opacity:0}4%{opacity:1}14%{opacity:1}16.7%{opacity:0.25}100%{opacity:0.25}}
-    #ai-readiness{animation:aiEntry 24s infinite}
-    @keyframes entryArrow{0%{opacity:0}12%{opacity:0}15%{opacity:0.8}20%{opacity:0.2}100%{opacity:0.2}}
-    #entry-arrow{animation:entryArrow 24s infinite}
+    /* ---- AI READINESS (entry, shows at start of each scenario) ---- */
+    @keyframes aiEntry{
+      0%{opacity:0}1%{opacity:0}2.5%{opacity:1}5%{opacity:1}6.25%{opacity:0}
+      49%{opacity:0}50%{opacity:0}52.5%{opacity:1}55%{opacity:1}56.25%{opacity:0}
+      100%{opacity:0}}
+    #ai-readiness{animation:aiEntry 48s infinite}
+    @keyframes entryArrow{
+      0%{opacity:0}4%{opacity:0}5.5%{opacity:0.8}6.5%{opacity:0.2}7%{opacity:0}
+      54%{opacity:0}55.5%{opacity:0.8}56.5%{opacity:0.2}57%{opacity:0}
+      100%{opacity:0}}
+    #entry-arrow{animation:entryArrow 48s infinite}
 
-    /* ---- NODE APPEARANCES ---- */
-    @keyframes n1{0%{opacity:0}2%{opacity:0}4%{opacity:1}96%{opacity:1}99%{opacity:0}100%{opacity:0}}
-    @keyframes n2{0%{opacity:0}3.5%{opacity:0}5.5%{opacity:1}96%{opacity:1}99%{opacity:0}100%{opacity:0}}
-    @keyframes n3{0%{opacity:0}5%{opacity:0}7%{opacity:1}96%{opacity:1}99%{opacity:0}100%{opacity:0}}
-    @keyframes n4{0%{opacity:0}6.5%{opacity:0}8.5%{opacity:1}96%{opacity:1}99%{opacity:0}100%{opacity:0}}
-    @keyframes n5{0%{opacity:0}8%{opacity:0}10%{opacity:1}96%{opacity:1}99%{opacity:0}100%{opacity:0}}
-    #node-code{animation:n1 24s infinite}#node-tests{animation:n2 24s infinite}
-    #node-obs{animation:n3 24s infinite}#node-context{animation:n4 24s infinite}
-    #node-specs-g{animation:n5 24s infinite}
+    /* ---- NODE APPEARANCES (fade in once, stay visible) ---- */
+    @keyframes n1{0%{opacity:0}1%{opacity:0}2.5%{opacity:1}100%{opacity:1}}
+    @keyframes n2{0%{opacity:0}1.5%{opacity:0}3%{opacity:1}100%{opacity:1}}
+    @keyframes n3{0%{opacity:0}2%{opacity:0}3.5%{opacity:1}100%{opacity:1}}
+    @keyframes n4{0%{opacity:0}2.5%{opacity:0}4%{opacity:1}100%{opacity:1}}
+    @keyframes n5{0%{opacity:0}3%{opacity:0}4.5%{opacity:1}100%{opacity:1}}
+    #node-code{animation:n1 48s infinite}#node-tests{animation:n2 48s infinite}
+    #node-obs{animation:n3 48s infinite}#node-context{animation:n4 48s infinite}
+    #node-specs-g{animation:n5 48s infinite}
 
-    /* ---- CYCLE BADGES (bright when active, dim otherwise) ---- */
-    @keyframes bMeasure{0%{opacity:0.3}16.7%{opacity:0.3}18%{opacity:1}31%{opacity:1}33.3%{opacity:0.3}100%{opacity:0.3}}
-    @keyframes bDetect{0%{opacity:0.3}33.3%{opacity:0.3}35%{opacity:1}52%{opacity:1}54.2%{opacity:0.3}100%{opacity:0.3}}
-    @keyframes bResolve{0%{opacity:0.3}54.2%{opacity:0.3}56%{opacity:1}73%{opacity:1}75%{opacity:0.3}100%{opacity:0.3}}
-    @keyframes bImplement{0%{opacity:0.3}75%{opacity:0.3}77%{opacity:1}89%{opacity:1}91.7%{opacity:0.3}100%{opacity:0.3}}
-    #badge-measure{animation:bMeasure 24s infinite}
-    #badge-detect{animation:bDetect 24s infinite}
-    #badge-resolve{animation:bResolve 24s infinite}
-    #badge-implement{animation:bImplement 24s infinite}
+    /* ---- CYCLE BADGES (bright when active, dim otherwise — twice per loop) ---- */
+    @keyframes bMeasure{
+      0%{opacity:0.3}
+      6.25%{opacity:0.3}8%{opacity:1}13%{opacity:1}14.6%{opacity:0.3}
+      56.25%{opacity:0.3}58%{opacity:1}63%{opacity:1}64.6%{opacity:0.3}
+      100%{opacity:0.3}}
+    @keyframes bDetect{
+      0%{opacity:0.3}
+      14.6%{opacity:0.3}16%{opacity:1}23%{opacity:1}25%{opacity:0.3}
+      64.6%{opacity:0.3}66%{opacity:1}73%{opacity:1}75%{opacity:0.3}
+      100%{opacity:0.3}}
+    @keyframes bResolve{
+      0%{opacity:0.3}
+      25%{opacity:0.3}27%{opacity:1}33%{opacity:1}35.4%{opacity:0.3}
+      75%{opacity:0.3}77%{opacity:1}83%{opacity:1}85.4%{opacity:0.3}
+      100%{opacity:0.3}}
+    @keyframes bImplement{
+      0%{opacity:0.3}
+      35.4%{opacity:0.3}37%{opacity:1}42%{opacity:1}43.75%{opacity:0.3}
+      85.4%{opacity:0.3}87%{opacity:1}92%{opacity:1}93.75%{opacity:0.3}
+      100%{opacity:0.3}}
+    #badge-measure{animation:bMeasure 48s infinite}
+    #badge-detect{animation:bDetect 48s infinite}
+    #badge-resolve{animation:bResolve 48s infinite}
+    #badge-implement{animation:bImplement 48s infinite}
 
     /* Badge halos */
-    @keyframes bhMeasure{0%{opacity:0}16.7%{opacity:0}18%{opacity:0.4}31%{opacity:0.4}33.3%{opacity:0}100%{opacity:0}}
-    @keyframes bhDetect{0%{opacity:0}33.3%{opacity:0}35%{opacity:0.4}52%{opacity:0.4}54.2%{opacity:0}100%{opacity:0}}
-    @keyframes bhResolve{0%{opacity:0}54.2%{opacity:0}56%{opacity:0.4}73%{opacity:0.4}75%{opacity:0}100%{opacity:0}}
-    @keyframes bhImplement{0%{opacity:0}75%{opacity:0}77%{opacity:0.4}89%{opacity:0.4}91.7%{opacity:0}100%{opacity:0}}
-    #halo-measure{animation:bhMeasure 24s infinite}
-    #halo-detect{animation:bhDetect 24s infinite}
-    #halo-resolve{animation:bhResolve 24s infinite}
-    #halo-implement{animation:bhImplement 24s infinite}
+    @keyframes bhMeasure{
+      0%{opacity:0}
+      6.25%{opacity:0}8%{opacity:0.4}13%{opacity:0.4}14.6%{opacity:0}
+      56.25%{opacity:0}58%{opacity:0.4}63%{opacity:0.4}64.6%{opacity:0}
+      100%{opacity:0}}
+    @keyframes bhDetect{
+      0%{opacity:0}
+      14.6%{opacity:0}16%{opacity:0.4}23%{opacity:0.4}25%{opacity:0}
+      64.6%{opacity:0}66%{opacity:0.4}73%{opacity:0.4}75%{opacity:0}
+      100%{opacity:0}}
+    @keyframes bhResolve{
+      0%{opacity:0}
+      25%{opacity:0}27%{opacity:0.4}33%{opacity:0.4}35.4%{opacity:0}
+      75%{opacity:0}77%{opacity:0.4}83%{opacity:0.4}85.4%{opacity:0}
+      100%{opacity:0}}
+    @keyframes bhImplement{
+      0%{opacity:0}
+      35.4%{opacity:0}37%{opacity:0.4}42%{opacity:0.4}43.75%{opacity:0}
+      85.4%{opacity:0}87%{opacity:0.4}92%{opacity:0.4}93.75%{opacity:0}
+      100%{opacity:0}}
+    #halo-measure{animation:bhMeasure 48s infinite}
+    #halo-detect{animation:bhDetect 48s infinite}
+    #halo-resolve{animation:bhResolve 48s infinite}
+    #halo-implement{animation:bhImplement 48s infinite}
 
-    /* ---- SPECS DRIFT + STROKE ---- */
+    /* ---- OBS DRIFT + STROKE (Scenario 1: 14.6-36%) ---- */
+    @keyframes obsDrift{
+      0%{transform:translate(0,0)}14.6%{transform:translate(0,0)}
+      20%{transform:translate(80px,45px)}32%{transform:translate(80px,45px)}
+      36%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+    #obs-drift{animation:obsDrift 48s infinite ease-in-out}
+    @keyframes obsStroke{
+      0%{stroke:#44aacc}
+      14.6%{stroke:#44aacc}16%{stroke:#ff4444}25%{stroke:#ff4444}
+      27%{stroke:#44aacc}35.4%{stroke:#44aacc}
+      37%{stroke:#44dd88}43.75%{stroke:#44dd88}
+      46%{stroke:#44aacc}100%{stroke:#44aacc}}
+    #obs-circle{animation:obsStroke 48s infinite}
+
+    /* ---- SPECS DRIFT + STROKE (Scenario 2: 64.6-86%) ---- */
     @keyframes specsDrift{
-      0%{transform:translate(0,0)}33.3%{transform:translate(0,0)}
-      42%{transform:translate(-85px,-45px)}75%{transform:translate(-85px,-45px)}
-      81%{transform:translate(0,0)}100%{transform:translate(0,0)}}
-    #specs-drift{animation:specsDrift 24s infinite ease-in-out}
+      0%{transform:translate(0,0)}64.6%{transform:translate(0,0)}
+      70%{transform:translate(-85px,-45px)}82%{transform:translate(-85px,-45px)}
+      86%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+    #specs-drift{animation:specsDrift 48s infinite ease-in-out}
     @keyframes specsStroke{
-      0%{stroke:#cc8844}33.3%{stroke:#cc8844}38%{stroke:#ff4444}54.2%{stroke:#ff4444}
-      57%{stroke:#cc8844}75%{stroke:#cc8844}80%{stroke:#44dd88}90%{stroke:#44dd88}95%{stroke:#cc8844}100%{stroke:#cc8844}}
-    #specs-circle{animation:specsStroke 24s infinite}
+      0%{stroke:#cc8844}
+      64.6%{stroke:#cc8844}66%{stroke:#ff4444}75%{stroke:#ff4444}
+      77%{stroke:#cc8844}85.4%{stroke:#cc8844}
+      87%{stroke:#44dd88}93.75%{stroke:#44dd88}
+      96%{stroke:#cc8844}100%{stroke:#cc8844}}
+    #specs-circle{animation:specsStroke 48s infinite}
 
-    /* ---- MEASUREMENT (Stage 2) ---- */
-    @keyframes connMeasure{0%{opacity:0}17.5%{opacity:0}20%{opacity:0.6}31%{opacity:0.6}33.3%{opacity:0}100%{opacity:0}}
+    /* ---- MEASUREMENT (both scenarios) ---- */
+    @keyframes connMeasure{
+      0%{opacity:0}
+      7.5%{opacity:0}9%{opacity:0.6}13%{opacity:0.6}14.6%{opacity:0}
+      57.5%{opacity:0}59%{opacity:0.6}63%{opacity:0.6}64.6%{opacity:0}
+      100%{opacity:0}}
     @keyframes dashPulse{to{stroke-dashoffset:-20}}
     .conn-measure{stroke:#4488cc;stroke-width:1.5;fill:none;stroke-dasharray:6 4;
-      animation:connMeasure 24s infinite,dashPulse 0.8s linear infinite}
+      animation:connMeasure 48s infinite,dashPulse 0.8s linear infinite}
 
-    /* ---- DECOHERENCE (Stage 3) ---- */
-    @keyframes decoherenceShow{0%{opacity:0}35%{opacity:0}37%{opacity:1}52%{opacity:1}54.2%{opacity:0}100%{opacity:0}}
-    #decoherence-group{animation:decoherenceShow 24s infinite}
+    /* ---- DECOHERENCE SC1: Obs drifts (14.6-25%) ---- */
+    @keyframes decoherenceShow1{
+      0%{opacity:0}16%{opacity:0}17%{opacity:1}23%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    #decoherence-sc1{animation:decoherenceShow1 48s infinite}
+
+    /* ---- DECOHERENCE SC2: Specs drifts (64.6-75%) ---- */
+    @keyframes decoherenceShow2{
+      0%{opacity:0}66%{opacity:0}67%{opacity:1}73%{opacity:1}75%{opacity:0}100%{opacity:0}}
+    #decoherence-sc2{animation:decoherenceShow2 48s infinite}
+
     .conn-red{stroke:#ff4444;stroke-width:2;fill:none;stroke-dasharray:6 4;animation:dashPulse 0.5s linear infinite}
     .conn-ok{stroke:#4488cc;stroke-width:1.5;fill:none;opacity:0.25}
     @keyframes outlierPulse{0%,100%{opacity:0.6}50%{opacity:1}}
     .outlier-badge{animation:outlierPulse 1.2s ease-in-out infinite}
 
-    /* ---- RESOLUTION (Stage 4) ---- */
-    @keyframes resolutionShow{0%{opacity:0}55%{opacity:0}57%{opacity:1}73%{opacity:1}75%{opacity:0}100%{opacity:0}}
-    #resolution-group{animation:resolutionShow 24s infinite}
-    @keyframes drawPathA{0%{stroke-dashoffset:160}58%{stroke-dashoffset:160}65%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
-    @keyframes drawPathB{0%{stroke-dashoffset:160}63%{stroke-dashoffset:160}70%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
-    .path-a{stroke-dasharray:160;animation:drawPathA 24s infinite}
-    .path-b{stroke-dasharray:160;animation:drawPathB 24s infinite}
+    /* ---- RESOLUTION SC1 (25-35.4%) ---- */
+    @keyframes resolutionShow1{
+      0%{opacity:0}26%{opacity:0}27%{opacity:1}34%{opacity:1}35.4%{opacity:0}100%{opacity:0}}
+    #resolution-sc1{animation:resolutionShow1 48s infinite}
 
-    /* ---- IMPLEMENT (Stage 5) ---- */
-    @keyframes implementShow{0%{opacity:0}76%{opacity:0}78%{opacity:1}89%{opacity:1}91.7%{opacity:0}100%{opacity:0}}
-    #implement-group{animation:implementShow 24s infinite}
+    /* ---- RESOLUTION SC2 (75-85.4%) ---- */
+    @keyframes resolutionShow2{
+      0%{opacity:0}76%{opacity:0}77%{opacity:1}84%{opacity:1}85.4%{opacity:0}100%{opacity:0}}
+    #resolution-sc2{animation:resolutionShow2 48s infinite}
+
+    /* ---- IMPLEMENT (both scenarios) ---- */
+    @keyframes implementShow{
+      0%{opacity:0}
+      36%{opacity:0}37.5%{opacity:1}42%{opacity:1}43.75%{opacity:0}
+      86%{opacity:0}87.5%{opacity:1}92%{opacity:1}93.75%{opacity:0}
+      100%{opacity:0}}
+    #implement-group{animation:implementShow 48s infinite}
     .conn-green{stroke:#44dd88;stroke-width:2;fill:none}
     @keyframes badgeGlow{0%,100%{opacity:0.8}50%{opacity:1}}
     .coherent-badge{animation:badgeGlow 1.5s ease-in-out infinite}
+
+    /* ---- SCENARIO LIST ---- */
+    @keyframes sc1Highlight{
+      0%{fill:#ffffff}43.75%{fill:#ffffff}46%{fill:#445566}93.75%{fill:#445566}96%{fill:#ffffff}100%{fill:#ffffff}}
+    @keyframes sc2Highlight{
+      0%{fill:#445566}43.75%{fill:#445566}46%{fill:#ffffff}93.75%{fill:#ffffff}96%{fill:#445566}100%{fill:#445566}}
+    #sc1-label{animation:sc1Highlight 48s infinite}
+    #sc2-label{animation:sc2Highlight 48s infinite}
+    @keyframes sc1Dot{
+      0%{opacity:1}43.75%{opacity:1}46%{opacity:0}93.75%{opacity:0}96%{opacity:1}100%{opacity:1}}
+    @keyframes sc2Dot{
+      0%{opacity:0}43.75%{opacity:0}46%{opacity:1}93.75%{opacity:1}96%{opacity:0}100%{opacity:0}}
+    #sc1-dot{animation:sc1Dot 48s infinite}
+    #sc2-dot{animation:sc2Dot 48s infinite}
   </style>
 
   <!-- ==================== BACKGROUND ==================== -->
@@ -110,16 +200,30 @@
   <text x="550" y="35" font-size="15" fill="#556677" text-anchor="middle"
     font-weight="300" letter-spacing="3">COHERENCE ENGINEERING CYCLE</text>
   <rect x="200" y="50" width="700" height="2" rx="1" fill="#1a2233"/>
-  <rect x="200" y="50" height="2" rx="1" fill="#4488cc" opacity="0.6">
-    <animate attributeName="width" values="0;700" dur="24s" repeatCount="indefinite"/>
+  <rect x="200" y="50" width="0" height="2" rx="1" fill="#4488cc" opacity="0.6">
+    <animate attributeName="width" values="0;700;700;0;700;700"
+      keyTimes="0;0.4375;0.49;0.5;0.9375;1" dur="48s" repeatCount="indefinite"/>
   </rect>
+
+  <!-- ==================== SCENARIO LIST (left side) ==================== -->
+  <text x="100" y="350" font-size="10" fill="#556677" text-anchor="middle"
+    font-weight="500" letter-spacing="2">SCENARIOS</text>
+  <line x1="55" y1="358" x2="145" y2="358" stroke="#1a2233" stroke-width="1"/>
+
+  <circle id="sc1-dot" cx="55" cy="382" r="3" fill="#4488cc"/>
+  <text id="sc1-label" x="66" y="386" font-size="13" font-weight="400"
+    letter-spacing="0.5">1. Alert fired</text>
+
+  <circle id="sc2-dot" cx="55" cy="412" r="3" fill="#4488cc"/>
+  <text id="sc2-label" x="66" y="416" font-size="13" font-weight="400"
+    letter-spacing="0.5">2. Spec changed</text>
 
   <!-- ==================== AI READINESS (entry point, outside cycle) ==================== -->
   <g id="ai-readiness">
     <text x="550" y="90" font-size="18" fill="#ffffff" text-anchor="middle"
       font-weight="300" letter-spacing="1.5">AI Readiness</text>
     <text x="550" y="112" font-size="12" fill="#667788" text-anchor="middle"
-      font-weight="300">Prerequisites — artifacts exist and are accessible</text>
+      font-weight="300">Prerequisites &#8212; artifacts exist and are accessible</text>
   </g>
   <line id="entry-arrow" x1="550" y1="125" x2="550" y2="172" stroke="#4488cc"
     stroke-width="1.5" marker-end="url(#arrowEntry)" opacity="0"/>
@@ -148,27 +252,32 @@
   <ellipse id="halo-resolve"   cx="550" cy="605" rx="60" ry="22" fill="#4488cc" opacity="0" filter="url(#haloGlow)"/>
   <ellipse id="halo-implement" cx="290" cy="400" rx="70" ry="22" fill="#4488cc" opacity="0" filter="url(#haloGlow)"/>
 
-  <!-- Stage badges -->
+  <!-- Stage badges (AI sparkle on Measure/Detect/Implement, human icon on Resolve) -->
   <g id="badge-measure" transform="translate(550,195)">
     <rect x="-55" y="-16" width="110" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
-    <text x="0" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">MEASURE</text>
+    <text x="-36" y="5" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+    <text x="10" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">MEASURE</text>
   </g>
   <g id="badge-detect" transform="translate(810,400)">
     <rect x="-46" y="-16" width="92" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
-    <text x="0" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">DETECT</text>
+    <text x="-28" y="5" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+    <text x="10" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">DETECT</text>
   </g>
   <g id="badge-resolve" transform="translate(550,605)">
     <rect x="-50" y="-16" width="100" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
-    <text x="0" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">RESOLVE</text>
+    <circle cx="-32" cy="-4" r="5" fill="none" stroke="#aabbcc" stroke-width="0.9"/>
+    <path d="M-38,6 Q-32,2 -26,6" fill="none" stroke="#aabbcc" stroke-width="0.9"/>
+    <text x="10" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">RESOLVE</text>
   </g>
   <g id="badge-implement" transform="translate(290,400)">
     <rect x="-60" y="-16" width="120" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
-    <text x="0" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">IMPLEMENT</text>
+    <text x="-40" y="5" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+    <text x="10" y="5" font-size="12" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1.5">IMPLEMENT</text>
   </g>
 
   <!-- ==================== CONNECTIONS (below nodes) ==================== -->
 
-  <!-- Stage 2: Measurement — all 10 pairwise -->
+  <!-- Measurement — all 10 pairwise (shows during both scenarios) -->
   <line x1="550" y1="305" x2="640" y2="371" class="conn-measure"/>
   <line x1="550" y1="305" x2="609" y2="477" class="conn-measure"/>
   <line x1="550" y1="305" x2="491" y2="477" class="conn-measure"/>
@@ -180,8 +289,21 @@
   <line x1="609" y1="477" x2="460" y2="371" class="conn-measure"/>
   <line x1="491" y1="477" x2="460" y2="371" class="conn-measure"/>
 
-  <!-- Stage 3: Decoherence — Specs drifts to ~(375,326) -->
-  <g id="decoherence-group">
+  <!-- Decoherence SC1: Obs drifts to ~(689,522) — red to Obs, ok between others -->
+  <g id="decoherence-sc1">
+    <line x1="550" y1="305" x2="689" y2="522" class="conn-red"/>
+    <line x1="640" y1="371" x2="689" y2="522" class="conn-red"/>
+    <line x1="550" y1="305" x2="640" y2="371" class="conn-ok"/>
+    <line x1="550" y1="305" x2="460" y2="371" class="conn-ok"/>
+    <line x1="460" y1="371" x2="491" y2="477" class="conn-ok"/>
+    <g class="outlier-badge" transform="translate(745,540)">
+      <rect x="-34" y="-13" width="68" height="26" rx="13" fill="#ff4444" fill-opacity="0.15"/>
+      <text x="0" y="5" font-size="11" fill="#ff6666" text-anchor="middle" font-weight="500">ALERT</text>
+    </g>
+  </g>
+
+  <!-- Decoherence SC2: Specs drifts to ~(375,326) — red to Specs, ok between others -->
+  <g id="decoherence-sc2">
     <line x1="550" y1="305" x2="375" y2="326" class="conn-red"/>
     <line x1="491" y1="477" x2="375" y2="326" class="conn-red"/>
     <line x1="550" y1="305" x2="640" y2="371" class="conn-ok"/>
@@ -193,7 +315,7 @@
     </g>
   </g>
 
-  <!-- Stage 5: Implement — all 10 green -->
+  <!-- Implement — all 10 green (shows during both scenarios) -->
   <g id="implement-group">
     <line x1="550" y1="305" x2="640" y2="371" class="conn-green"/>
     <line x1="550" y1="305" x2="609" y2="477" class="conn-green"/>
@@ -227,11 +349,13 @@
     <text x="672" y="404" class="node-label" text-anchor="start">Tests</text>
   </g>
 
-  <!-- Observability — bottom-right -->
-  <g id="node-obs">
-    <circle cx="609" cy="477" r="28" class="node-circle" stroke="#44aacc" filter="url(#glow)"/>
-    <text x="609" y="483" class="node-icon" font-size="16" fill="#44aacc">&#9678;</text>
-    <text x="642" y="510" class="node-label" text-anchor="start">Observability</text>
+  <!-- Observability — bottom-right (drifts during SC1) -->
+  <g id="obs-drift">
+    <g id="node-obs">
+      <circle id="obs-circle" cx="609" cy="477" r="28" class="node-circle" stroke="#44aacc" filter="url(#glow)"/>
+      <text x="609" y="483" class="node-icon" font-size="16" fill="#44aacc">&#9678;</text>
+      <text x="642" y="510" class="node-label" text-anchor="start">Observability</text>
+    </g>
   </g>
 
   <!-- Context — bottom-left -->
@@ -241,7 +365,7 @@
     <text x="458" y="510" class="node-label" text-anchor="end">Context</text>
   </g>
 
-  <!-- Specs — top-left (drifts during decoherence) -->
+  <!-- Specs — top-left (drifts during SC2) -->
   <g id="specs-drift">
     <g id="node-specs-g">
       <circle id="specs-circle" cx="460" cy="371" r="28" class="node-circle" stroke="#cc8844" filter="url(#glow)"/>
@@ -250,29 +374,39 @@
     </g>
   </g>
 
-  <!-- ==================== STAGE 4: RESOLUTION (below Resolve badge) ==================== -->
-  <g id="resolution-group">
-    <!-- Human/Agent icon -->
-    <g transform="translate(550,650)">
-      <circle cx="0" cy="-12" r="10" fill="none" stroke="#aabbcc" stroke-width="1.2"/>
-      <path d="M-12,8 Q0,0 12,8" fill="none" stroke="#aabbcc" stroke-width="1.2"/>
+  <!-- ==================== RESOLUTION SC1 (below Resolve badge) ==================== -->
+  <g id="resolution-sc1">
+    <text x="550" y="648" font-size="10" fill="#8899aa" text-anchor="middle">Human chooses</text>
+    <g transform="translate(455,670)">
+      <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">A: Disable alert</text>
     </g>
-    <text x="550" y="674" font-size="10" fill="#667788" text-anchor="middle">Human / Agent decides</text>
+    <text x="550" y="674" font-size="9" fill="#556677" text-anchor="middle">or</text>
+    <g transform="translate(645,670)">
+      <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Fix edge case</text>
+    </g>
+    <text x="550" y="706" font-size="9" fill="#556677" text-anchor="middle">&#10024; Agent implements chosen resolution</text>
+  </g>
 
-    <!-- Path A -->
-    <path d="M390,692 C425,680 475,680 510,692" class="path-a"
-      stroke="#66aadd" stroke-width="1.2" fill="none" marker-end="url(#arrowBlue)"/>
-    <text x="450" y="710" class="path-label" font-size="10">A: Outlier &#8594; Cloud</text>
-
-    <!-- Path B -->
-    <path d="M590,692 C625,680 675,680 710,692" class="path-b"
-      stroke="#66aadd" stroke-width="1.2" fill="none" marker-end="url(#arrowBlue)"/>
-    <text x="650" y="710" class="path-label" font-size="10">B: Cloud &#8594; Outlier</text>
+  <!-- ==================== RESOLUTION SC2 (below Resolve badge) ==================== -->
+  <g id="resolution-sc2">
+    <text x="550" y="648" font-size="10" fill="#8899aa" text-anchor="middle">Human chooses</text>
+    <g transform="translate(455,670)">
+      <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">A: Revert spec</text>
+    </g>
+    <text x="550" y="674" font-size="9" fill="#556677" text-anchor="middle">or</text>
+    <g transform="translate(645,670)">
+      <rect x="-70" y="-13" width="140" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Align all to spec</text>
+    </g>
+    <text x="550" y="706" font-size="9" fill="#556677" text-anchor="middle">&#10024; Agent implements chosen resolution</text>
   </g>
 
   <!-- ==================== FOOTER ==================== -->
   <line x1="250" y1="730" x2="850" y2="730" stroke="#1a2233" stroke-width="1"/>
   <text x="550" y="750" font-size="10" fill="#3a4a5a" text-anchor="middle" letter-spacing="1">
-    No single source of truth — quality emerges from alignment between all artifacts telling the same story
+    No single source of truth &#8212; quality emerges from alignment between all artifacts telling the same story
   </text>
 </svg>
