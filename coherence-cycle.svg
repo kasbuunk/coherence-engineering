@@ -104,31 +104,31 @@
     #halo-resolve{animation:bhResolve 48s infinite}
     #halo-implement{animation:bhImplement 48s infinite}
 
-    /* ---- OBS DRIFT + STROKE (Scenario 1: 14.6-36%) ---- */
+    /* ---- OBS DRIFT + STROKE (Scenario 1: drifts out 14.6-20%, returns during implement 35.4-40%) ---- */
     @keyframes obsDrift{
       0%{transform:translate(0,0)}14.6%{transform:translate(0,0)}
-      20%{transform:translate(80px,45px)}32%{transform:translate(80px,45px)}
-      36%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+      20%{transform:translate(80px,45px)}35.4%{transform:translate(80px,45px)}
+      40%{transform:translate(0,0)}100%{transform:translate(0,0)}}
     #obs-drift{animation:obsDrift 48s infinite ease-in-out}
     @keyframes obsStroke{
       0%{stroke:#44aacc}
       14.6%{stroke:#44aacc}16%{stroke:#ff4444}25%{stroke:#ff4444}
-      27%{stroke:#44aacc}35.4%{stroke:#44aacc}
-      37%{stroke:#44dd88}43.75%{stroke:#44dd88}
+      27%{stroke:#44aacc}
+      37%{stroke:#44aacc}39%{stroke:#44dd88}43.75%{stroke:#44dd88}
       46%{stroke:#44aacc}100%{stroke:#44aacc}}
     #obs-circle{animation:obsStroke 48s infinite}
 
-    /* ---- SPECS DRIFT + STROKE (Scenario 2: 64.6-86%) ---- */
+    /* ---- SPECS DRIFT + STROKE (Scenario 2: drifts out 64.6-70%, returns during implement 85.4-90%) ---- */
     @keyframes specsDrift{
       0%{transform:translate(0,0)}64.6%{transform:translate(0,0)}
-      70%{transform:translate(-85px,-45px)}82%{transform:translate(-85px,-45px)}
-      86%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+      70%{transform:translate(-85px,-45px)}85.4%{transform:translate(-85px,-45px)}
+      90%{transform:translate(0,0)}100%{transform:translate(0,0)}}
     #specs-drift{animation:specsDrift 48s infinite ease-in-out}
     @keyframes specsStroke{
       0%{stroke:#cc8844}
       64.6%{stroke:#cc8844}66%{stroke:#ff4444}75%{stroke:#ff4444}
-      77%{stroke:#cc8844}85.4%{stroke:#cc8844}
-      87%{stroke:#44dd88}93.75%{stroke:#44dd88}
+      77%{stroke:#cc8844}
+      87%{stroke:#cc8844}89%{stroke:#44dd88}93.75%{stroke:#44dd88}
       96%{stroke:#cc8844}100%{stroke:#cc8844}}
     #specs-circle{animation:specsStroke 48s infinite}
 
@@ -167,16 +167,40 @@
       0%{opacity:0}76%{opacity:0}77%{opacity:1}84%{opacity:1}85.4%{opacity:0}100%{opacity:0}}
     #resolution-sc2{animation:resolutionShow2 48s infinite}
 
-    /* ---- IMPLEMENT (both scenarios) ---- */
+    /* ---- IMPLEMENT (both scenarios — green connections appear after node returns) ---- */
     @keyframes implementShow{
       0%{opacity:0}
-      36%{opacity:0}37.5%{opacity:1}42%{opacity:1}43.75%{opacity:0}
-      86%{opacity:0}87.5%{opacity:1}92%{opacity:1}93.75%{opacity:0}
+      39.5%{opacity:0}40.5%{opacity:1}42.5%{opacity:1}43.75%{opacity:0}
+      89.5%{opacity:0}90.5%{opacity:1}92.5%{opacity:1}93.75%{opacity:0}
       100%{opacity:0}}
     #implement-group{animation:implementShow 48s infinite}
     .conn-green{stroke:#44dd88;stroke-width:2;fill:none}
     @keyframes badgeGlow{0%,100%{opacity:0.8}50%{opacity:1}}
     .coherent-badge{animation:badgeGlow 1.5s ease-in-out infinite}
+
+    /* ---- HANDOFF DOT (Resolve → Implement after pill selection) ---- */
+    @keyframes handoffMove{
+      0%{transform:translate(550px,605px);opacity:0}
+      33%{transform:translate(550px,605px);opacity:0}
+      33.5%{transform:translate(550px,605px);opacity:0.9}
+      36%{transform:translate(290px,400px);opacity:0.9}
+      36.5%{transform:translate(290px,400px);opacity:0}
+      83%{transform:translate(550px,605px);opacity:0}
+      83.5%{transform:translate(550px,605px);opacity:0.9}
+      86%{transform:translate(290px,400px);opacity:0.9}
+      86.5%{transform:translate(290px,400px);opacity:0}
+      100%{transform:translate(290px,400px);opacity:0}}
+    #handoff-dot{animation:handoffMove 48s infinite ease-in-out}
+
+    /* ---- AI WORKING SPARKLES (visible while node returns during implement) ---- */
+    @keyframes aiWorking1{
+      0%{opacity:0}36%{opacity:0}36.5%{opacity:1}39.5%{opacity:1}40.5%{opacity:0}100%{opacity:0}}
+    @keyframes aiWorking2{
+      0%{opacity:0}86%{opacity:0}86.5%{opacity:1}89.5%{opacity:1}90.5%{opacity:0}100%{opacity:0}}
+    #ai-working-sc1{animation:aiWorking1 48s infinite}
+    #ai-working-sc2{animation:aiWorking2 48s infinite}
+    @keyframes sparkle{0%,100%{opacity:0.4}50%{opacity:1}}
+    .ai-spark{animation:sparkle 0.7s ease-in-out infinite}
 
     /* ---- SCENARIO LIST ---- */
     @keyframes sc1Highlight{
@@ -344,6 +368,9 @@
     </g>
   </g>
 
+  <!-- Handoff dot: travels from Resolve to Implement after pill selection -->
+  <circle id="handoff-dot" r="5" fill="#4488cc" filter="url(#glow)" opacity="0"/>
+
   <!-- Implement — all 10 green (shows during both scenarios) -->
   <g id="implement-group">
     <line x1="550" y1="305" x2="640" y2="371" class="conn-green"/>
@@ -385,6 +412,11 @@
       <text x="609" y="483" class="node-icon" font-size="16" fill="#44aacc">&#9678;</text>
       <text x="642" y="510" class="node-label" text-anchor="start">Observability</text>
     </g>
+    <g id="ai-working-sc1" opacity="0">
+      <text class="ai-spark" x="581" y="462" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+      <text class="ai-spark" x="637" y="498" font-size="8" fill="#66aadd" text-anchor="middle" style="animation-delay:0.3s">&#10024;</text>
+      <text class="ai-spark" x="600" y="508" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.5s">&#10024;</text>
+    </g>
   </g>
 
   <!-- Context — bottom-left -->
@@ -400,6 +432,11 @@
       <circle id="specs-circle" cx="460" cy="371" r="28" class="node-circle" stroke="#cc8844" filter="url(#glow)"/>
       <text x="460" y="377" class="node-icon" font-size="16" fill="#cc8844">&#9776;</text>
       <text x="428" y="404" class="node-label" text-anchor="end">Specs</text>
+    </g>
+    <g id="ai-working-sc2" opacity="0">
+      <text class="ai-spark" x="432" y="358" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+      <text class="ai-spark" x="488" y="390" font-size="8" fill="#66aadd" text-anchor="middle" style="animation-delay:0.3s">&#10024;</text>
+      <text class="ai-spark" x="450" y="402" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.5s">&#10024;</text>
     </g>
   </g>
 
