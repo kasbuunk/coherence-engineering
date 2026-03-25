@@ -260,14 +260,14 @@
     <text x="550" y="674" font-size="10" fill="#667788" text-anchor="middle">Human / Agent decides</text>
 
     <!-- Path A -->
-    <path d="M440,692 C475,680 525,680 560,692" class="path-a"
+    <path d="M390,692 C425,680 475,680 510,692" class="path-a"
       stroke="#66aadd" stroke-width="1.2" fill="none" marker-end="url(#arrowBlue)"/>
-    <text x="500" y="710" class="path-label" font-size="10">A: Outlier &#8594; Cloud</text>
+    <text x="450" y="710" class="path-label" font-size="10">A: Outlier &#8594; Cloud</text>
 
     <!-- Path B -->
-    <path d="M640,692 C675,680 725,680 760,692" class="path-b"
+    <path d="M590,692 C625,680 675,680 710,692" class="path-b"
       stroke="#66aadd" stroke-width="1.2" fill="none" marker-end="url(#arrowBlue)"/>
-    <text x="700" y="710" class="path-label" font-size="10">B: Cloud &#8594; Outlier</text>
+    <text x="650" y="710" class="path-label" font-size="10">B: Cloud &#8594; Outlier</text>
   </g>
 
   <!-- ==================== FOOTER ==================== -->
