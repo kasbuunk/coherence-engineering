@@ -191,6 +191,35 @@
       0%{opacity:0}43.75%{opacity:0}46%{opacity:1}93.75%{opacity:1}96%{opacity:0}100%{opacity:0}}
     #sc1-dot{animation:sc1Dot 48s infinite}
     #sc2-dot{animation:sc2Dot 48s infinite}
+
+    /* ---- PILL SELECTION (human picks option B) ---- */
+    /* SC1: resolve visible 27-34%, selection fires at ~30% */
+    @keyframes pillADim1{
+      0%{opacity:1}29.5%{opacity:1}30.5%{opacity:0.3}34%{opacity:0.3}35%{opacity:1}100%{opacity:1}}
+    @keyframes pillBRect1{
+      0%{stroke:#4488cc;fill:#334455}29.5%{stroke:#4488cc;fill:#334455}
+      30.5%{stroke:#44ddaa;fill:#1a3344}34%{stroke:#44ddaa;fill:#1a3344}
+      35%{stroke:#4488cc;fill:#334455}100%{stroke:#4488cc;fill:#334455}}
+    @keyframes pillBText1{
+      0%{fill:#aabbcc}29.5%{fill:#aabbcc}30.5%{fill:#ffffff}34%{fill:#ffffff}
+      35%{fill:#aabbcc}100%{fill:#aabbcc}}
+    #sc1-pill-a{animation:pillADim1 48s infinite}
+    #sc1-rect-b{animation:pillBRect1 48s infinite}
+    #sc1-text-b{animation:pillBText1 48s infinite}
+
+    /* SC2: resolve visible 77-84%, selection fires at ~80% */
+    @keyframes pillADim2{
+      0%{opacity:1}79.5%{opacity:1}80.5%{opacity:0.3}84%{opacity:0.3}85%{opacity:1}100%{opacity:1}}
+    @keyframes pillBRect2{
+      0%{stroke:#4488cc;fill:#334455}79.5%{stroke:#4488cc;fill:#334455}
+      80.5%{stroke:#44ddaa;fill:#1a3344}84%{stroke:#44ddaa;fill:#1a3344}
+      85%{stroke:#4488cc;fill:#334455}100%{stroke:#4488cc;fill:#334455}}
+    @keyframes pillBText2{
+      0%{fill:#aabbcc}79.5%{fill:#aabbcc}80.5%{fill:#ffffff}84%{fill:#ffffff}
+      85%{fill:#aabbcc}100%{fill:#aabbcc}}
+    #sc2-pill-a{animation:pillADim2 48s infinite}
+    #sc2-rect-b{animation:pillBRect2 48s infinite}
+    #sc2-text-b{animation:pillBText2 48s infinite}
   </style>
 
   <!-- ==================== BACKGROUND ==================== -->
@@ -216,7 +245,7 @@
 
   <circle id="sc2-dot" cx="55" cy="412" r="3" fill="#4488cc"/>
   <text id="sc2-label" x="66" y="416" font-size="13" font-weight="400"
-    letter-spacing="0.5">2. Spec changed</text>
+    letter-spacing="0.5">2. Reqs changed</text>
 
   <!-- ==================== AI READINESS (entry point, outside cycle) ==================== -->
   <g id="ai-readiness">
@@ -377,14 +406,14 @@
   <!-- ==================== RESOLUTION SC1 (below Resolve badge) ==================== -->
   <g id="resolution-sc1">
     <text x="550" y="648" font-size="10" fill="#8899aa" text-anchor="middle">Human chooses</text>
-    <g transform="translate(455,670)">
+    <g id="sc1-pill-a" transform="translate(455,670)">
       <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
       <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">A: Disable alert</text>
     </g>
     <text x="550" y="674" font-size="9" fill="#556677" text-anchor="middle">or</text>
-    <g transform="translate(645,670)">
-      <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
-      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Fix edge case</text>
+    <g id="sc1-pill-b" transform="translate(645,670)">
+      <rect id="sc1-rect-b" x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text id="sc1-text-b" x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Fix edge case</text>
     </g>
     <text x="550" y="706" font-size="9" fill="#556677" text-anchor="middle">&#10024; Agent implements chosen resolution</text>
   </g>
@@ -392,14 +421,14 @@
   <!-- ==================== RESOLUTION SC2 (below Resolve badge) ==================== -->
   <g id="resolution-sc2">
     <text x="550" y="648" font-size="10" fill="#8899aa" text-anchor="middle">Human chooses</text>
-    <g transform="translate(455,670)">
+    <g id="sc2-pill-a" transform="translate(455,670)">
       <rect x="-62" y="-13" width="124" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
       <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">A: Revert spec</text>
     </g>
     <text x="550" y="674" font-size="9" fill="#556677" text-anchor="middle">or</text>
-    <g transform="translate(645,670)">
-      <rect x="-70" y="-13" width="140" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
-      <text x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Align all to spec</text>
+    <g id="sc2-pill-b" transform="translate(645,670)">
+      <rect id="sc2-rect-b" x="-70" y="-13" width="140" height="26" rx="13" fill="#334455" stroke="#4488cc" stroke-width="0.8"/>
+      <text id="sc2-text-b" x="0" y="4" font-size="10" fill="#aabbcc" text-anchor="middle">B: Align all to spec</text>
     </g>
     <text x="550" y="706" font-size="9" fill="#556677" text-anchor="middle">&#10024; Agent implements chosen resolution</text>
   </g>
