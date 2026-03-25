@@ -1,0 +1,382 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 780" width="1100" height="780">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#66aadd" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <style>
+    /* =============================================
+       COHERENCE ENGINEERING CYCLE — ANIMATION
+       Total: 24s loop
+       Stage 1  AI Readiness       0-4s     0%-16.7%
+       Stage 2  Measure Coherence  4-8s    16.7%-33.3%
+       Stage 3  Detect Decoherence 8-13s   33.3%-54.2%
+       Stage 4  Resolution        13-18s   54.2%-75%
+       Stage 5  Implement         18-22s   75%-91.7%
+       Stage 6  Repeat/pause      22-24s   91.7%-100%
+       ============================================= */
+
+    text { font-family: 'Helvetica Neue', Arial, sans-serif; }
+    .stage-label { font-size: 24px; fill: #fff; text-anchor: middle; font-weight: 300; letter-spacing: 2px; }
+    .stage-sub { font-size: 14px; fill: #8899aa; text-anchor: middle; font-weight: 300; }
+    .node-circle { fill: #1a2233; stroke-width: 2; }
+    .node-label { font-size: 14px; fill: #fff; text-anchor: middle; font-weight: 400; }
+    .path-label { font-size: 12px; fill: #aabbcc; text-anchor: middle; }
+
+    /* ---- STAGE LABEL ANIMATIONS ---- */
+    @keyframes label1 {
+      0% { opacity:0; } 1% { opacity:0; } 3% { opacity:1; }
+      14% { opacity:1; } 16.7% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes label2 {
+      0% { opacity:0; } 17.5% { opacity:0; } 19% { opacity:1; }
+      31% { opacity:1; } 33.3% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes label3 {
+      0% { opacity:0; } 34% { opacity:0; } 36% { opacity:1; }
+      52% { opacity:1; } 54.2% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes label4 {
+      0% { opacity:0; } 55% { opacity:0; } 57% { opacity:1; }
+      73% { opacity:1; } 75% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes label5 {
+      0% { opacity:0; } 76% { opacity:0; } 78% { opacity:1; }
+      89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes label6 {
+      0% { opacity:0; } 92% { opacity:0; } 93% { opacity:1; }
+      98% { opacity:1; } 100% { opacity:0; }
+    }
+
+    #label-1 { animation: label1 24s infinite; }
+    #label-2 { animation: label2 24s infinite; }
+    #label-3 { animation: label3 24s infinite; }
+    #label-4 { animation: label4 24s infinite; }
+    #label-5 { animation: label5 24s infinite; }
+    #label-6 { animation: label6 24s infinite; }
+
+    /* ---- NODE APPEARANCES ---- */
+    @keyframes nodeCode {
+      0% { opacity:0; } 2.5% { opacity:0; } 5% { opacity:1; }
+      96% { opacity:1; } 99% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes nodeTests {
+      0% { opacity:0; } 4.2% { opacity:0; } 6.5% { opacity:1; }
+      96% { opacity:1; } 99% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes nodeSpecs {
+      0% { opacity:0; } 5.8% { opacity:0; } 8% { opacity:1; }
+      96% { opacity:1; } 99% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes nodeContext {
+      0% { opacity:0; } 7.5% { opacity:0; } 10% { opacity:1; }
+      96% { opacity:1; } 99% { opacity:0; } 100% { opacity:0; }
+    }
+
+    #node-code    { animation: nodeCode 24s infinite; }
+    #node-tests   { animation: nodeTests 24s infinite; }
+    #node-specs-g { animation: nodeSpecs 24s infinite; }
+    #node-context { animation: nodeContext 24s infinite; }
+
+    /* ---- SPECS DRIFT ---- */
+    @keyframes specsDrift {
+      0%    { transform: translate(0, 0); }
+      33.3% { transform: translate(0, 0); }
+      42%   { transform: translate(80px, -50px); }
+      75%   { transform: translate(80px, -50px); }
+      81%   { transform: translate(0, 0); }
+      100%  { transform: translate(0, 0); }
+    }
+    #specs-drift { animation: specsDrift 24s infinite ease-in-out; }
+
+    /* ---- MEASUREMENT CONNECTIONS (Stage 2) ---- */
+    @keyframes connMeasure {
+      0% { opacity:0; } 17.5% { opacity:0; } 20% { opacity:0.8; }
+      31% { opacity:0.8; } 33.3% { opacity:0; } 100% { opacity:0; }
+    }
+    @keyframes dashPulse { to { stroke-dashoffset: -20; } }
+
+    .conn-measure {
+      stroke: #4488cc; stroke-width: 1.5; fill: none;
+      stroke-dasharray: 6 4;
+      animation: connMeasure 24s infinite, dashPulse 0.8s linear infinite;
+    }
+    .conn-measure.c2 { animation-delay: 0s, 0.15s; }
+    .conn-measure.c3 { animation-delay: 0s, 0.3s; }
+    .conn-measure.c4 { animation-delay: 0s, 0.45s; }
+    .conn-measure.c5 { animation-delay: 0s, 0.6s; }
+    .conn-measure.c6 { animation-delay: 0s, 0.75s; }
+
+    /* ---- DECOHERENCE (Stage 3) ---- */
+    @keyframes decoherenceShow {
+      0% { opacity:0; } 35% { opacity:0; } 37% { opacity:1; }
+      52% { opacity:1; } 54.2% { opacity:0; } 100% { opacity:0; }
+    }
+    #decoherence-group { animation: decoherenceShow 24s infinite; }
+
+    .conn-red {
+      stroke: #ff4444; stroke-width: 2; fill: none;
+      stroke-dasharray: 6 4;
+      animation: dashPulse 0.5s linear infinite;
+    }
+    .conn-ok { stroke: #4488cc; stroke-width: 1.5; fill: none; opacity: 0.3; }
+
+    @keyframes outlierBadgePulse {
+      0%, 100% { opacity: 0.6; } 50% { opacity: 1; }
+    }
+    .outlier-badge { animation: outlierBadgePulse 1.2s ease-in-out infinite; }
+
+    /* ---- SPECS STROKE COLOR ---- */
+    @keyframes specsStroke {
+      0%    { stroke: #cc8844; }
+      33.3% { stroke: #cc8844; }
+      38%   { stroke: #ff4444; }
+      54.2% { stroke: #ff4444; }
+      57%   { stroke: #cc8844; }
+      75%   { stroke: #cc8844; }
+      80%   { stroke: #44dd88; }
+      90%   { stroke: #44dd88; }
+      95%   { stroke: #cc8844; }
+      100%  { stroke: #cc8844; }
+    }
+    #specs-circle { animation: specsStroke 24s infinite; }
+
+    /* ---- RESOLUTION (Stage 4) ---- */
+    @keyframes resolutionShow {
+      0% { opacity:0; } 55% { opacity:0; } 57% { opacity:1; }
+      73% { opacity:1; } 75% { opacity:0; } 100% { opacity:0; }
+    }
+    #resolution-group { animation: resolutionShow 24s infinite; }
+
+    @keyframes drawPathA {
+      0% { stroke-dashoffset:200; } 58% { stroke-dashoffset:200; }
+      65% { stroke-dashoffset:0; } 100% { stroke-dashoffset:0; }
+    }
+    @keyframes drawPathB {
+      0% { stroke-dashoffset:200; } 63% { stroke-dashoffset:200; }
+      70% { stroke-dashoffset:0; } 100% { stroke-dashoffset:0; }
+    }
+    .path-a { stroke-dasharray: 200; animation: drawPathA 24s infinite; }
+    .path-b { stroke-dasharray: 200; animation: drawPathB 24s infinite; }
+
+    /* ---- IMPLEMENT (Stage 5) ---- */
+    @keyframes implementShow {
+      0% { opacity:0; } 76% { opacity:0; } 78% { opacity:1; }
+      89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; }
+    }
+    #implement-group { animation: implementShow 24s infinite; }
+
+    @keyframes cg1 { 0% { opacity:0; } 78% { opacity:0; } 80% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+    @keyframes cg2 { 0% { opacity:0; } 79% { opacity:0; } 81% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+    @keyframes cg3 { 0% { opacity:0; } 80% { opacity:0; } 82% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+    @keyframes cg4 { 0% { opacity:0; } 81% { opacity:0; } 83% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+    @keyframes cg5 { 0% { opacity:0; } 82% { opacity:0; } 84% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+    @keyframes cg6 { 0% { opacity:0; } 83% { opacity:0; } 85% { opacity:1; } 89% { opacity:1; } 91.7% { opacity:0; } 100% { opacity:0; } }
+
+    .conn-green { stroke: #44dd88; stroke-width: 2; fill: none; }
+    .cg1 { animation: cg1 24s infinite; }
+    .cg2 { animation: cg2 24s infinite; }
+    .cg3 { animation: cg3 24s infinite; }
+    .cg4 { animation: cg4 24s infinite; }
+    .cg5 { animation: cg5 24s infinite; }
+    .cg6 { animation: cg6 24s infinite; }
+
+    /* ---- CYCLE DOTS ---- */
+    @keyframes dot1 { 0% { fill:#4488cc; } 16.7% { fill:#4488cc; } 17% { fill:#334455; } 100% { fill:#334455; } }
+    @keyframes dot2 { 0% { fill:#334455; } 16.7% { fill:#4488cc; } 33.3% { fill:#4488cc; } 34% { fill:#334455; } 100% { fill:#334455; } }
+    @keyframes dot3 { 0% { fill:#334455; } 33.3% { fill:#4488cc; } 54.2% { fill:#4488cc; } 55% { fill:#334455; } 100% { fill:#334455; } }
+    @keyframes dot4 { 0% { fill:#334455; } 54.2% { fill:#4488cc; } 75% { fill:#4488cc; } 76% { fill:#334455; } 100% { fill:#334455; } }
+    @keyframes dot5 { 0% { fill:#334455; } 75% { fill:#4488cc; } 91.7% { fill:#4488cc; } 92% { fill:#334455; } 100% { fill:#334455; } }
+
+    #cd1 { animation: dot1 24s infinite; }
+    #cd2 { animation: dot2 24s infinite; }
+    #cd3 { animation: dot3 24s infinite; }
+    #cd4 { animation: dot4 24s infinite; }
+    #cd5 { animation: dot5 24s infinite; }
+
+    /* ---- COHERENT BADGE GLOW ---- */
+    @keyframes badgeGlow { 0%, 100% { opacity:0.8; } 50% { opacity:1; } }
+    .coherent-badge { animation: badgeGlow 1.5s ease-in-out infinite; }
+  </style>
+
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="1100" height="780" fill="#0d1117" rx="8"/>
+
+  <!-- Title -->
+  <text x="550" y="42" font-size="16" fill="#556677" text-anchor="middle"
+    font-weight="300" letter-spacing="3">COHERENCE ENGINEERING CYCLE</text>
+
+  <!-- Progress bar -->
+  <rect x="150" y="60" width="800" height="2" rx="1" fill="#1a2233"/>
+  <rect x="150" y="60" height="2" rx="1" fill="#4488cc" opacity="0.7">
+    <animate attributeName="width" values="0;800" dur="24s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Cycle step indicators -->
+  <g transform="translate(550, 84)">
+    <circle id="cd1" cx="-200" cy="0" r="4" fill="#334455"/>
+    <circle id="cd2" cx="-100" cy="0" r="4" fill="#334455"/>
+    <circle id="cd3" cx="0"    cy="0" r="4" fill="#334455"/>
+    <circle id="cd4" cx="100"  cy="0" r="4" fill="#334455"/>
+    <circle id="cd5" cx="200"  cy="0" r="4" fill="#334455"/>
+    <text x="-200" y="20" class="stage-sub" font-size="9">READY</text>
+    <text x="-100" y="20" class="stage-sub" font-size="9">MEASURE</text>
+    <text x="0"    y="20" class="stage-sub" font-size="9">DETECT</text>
+    <text x="100"  y="20" class="stage-sub" font-size="9">RESOLVE</text>
+    <text x="200"  y="20" class="stage-sub" font-size="9">IMPLEMENT</text>
+  </g>
+
+  <!-- ==================== STAGE LABELS ==================== -->
+  <g id="label-1">
+    <text x="550" y="148" class="stage-label">AI Readiness</text>
+    <text x="550" y="174" class="stage-sub">Artifacts and context materialise</text>
+  </g>
+  <g id="label-2">
+    <text x="550" y="148" class="stage-label">Measure Coherence</text>
+    <text x="550" y="174" class="stage-sub">Pairwise alignment assessment</text>
+  </g>
+  <g id="label-3">
+    <text x="550" y="148" class="stage-label">Detect Decoherence</text>
+    <text x="550" y="174" class="stage-sub">Outlier artifact identified</text>
+  </g>
+  <g id="label-4">
+    <text x="550" y="148" class="stage-label">Decoherence Resolution</text>
+    <text x="550" y="174" class="stage-sub">Human decides resolution path</text>
+  </g>
+  <g id="label-5">
+    <text x="550" y="148" class="stage-label">Implement</text>
+    <text x="550" y="174" class="stage-sub">Artifacts realign into coherence</text>
+  </g>
+  <g id="label-6">
+    <text x="550" y="148" class="stage-label">Repeat</text>
+    <text x="550" y="174" class="stage-sub">Coherence converges over time</text>
+  </g>
+
+  <!-- ==================== STAGE 1: ARTIFACT NODES ==================== -->
+  <!--
+    Nodes in a wide rectangle, right-center of canvas.
+    Code (550,310)  Tests (790,310)
+    Context (550,530)  Specs (790,530)
+    240px horizontal gap, 220px vertical gap, r=42
+  -->
+
+  <!-- Code (top-left) -->
+  <g id="node-code">
+    <circle cx="550" cy="310" r="42" class="node-circle" stroke="#4488cc" filter="url(#glow)"/>
+    <text x="550" y="304" class="node-label" font-size="16" fill="#4488cc">{}</text>
+    <text x="550" y="324" class="node-label">Code</text>
+  </g>
+
+  <!-- Tests (top-right) -->
+  <g id="node-tests">
+    <circle cx="790" cy="310" r="42" class="node-circle" stroke="#44cc88" filter="url(#glow)"/>
+    <text x="790" y="304" class="node-label" font-size="16" fill="#44cc88">&#10003;</text>
+    <text x="790" y="324" class="node-label">Tests</text>
+  </g>
+
+  <!-- Specs (bottom-right) — drifts during decoherence -->
+  <g id="specs-drift">
+    <g id="node-specs-g">
+      <circle id="specs-circle" cx="790" cy="530" r="42" class="node-circle" stroke="#cc8844" filter="url(#glow)"/>
+      <text x="790" y="524" class="node-label" font-size="16" fill="#cc8844">&#9776;</text>
+      <text x="790" y="544" class="node-label">Specs</text>
+    </g>
+  </g>
+
+  <!-- Context (bottom-left) -->
+  <g id="node-context">
+    <circle cx="550" cy="530" r="42" class="node-circle" stroke="#8866cc" filter="url(#glow)"/>
+    <text x="550" y="524" class="node-label" font-size="16" fill="#8866cc">&#9883;</text>
+    <text x="550" y="544" class="node-label">Context</text>
+  </g>
+
+  <!-- ==================== STAGE 2: MEASUREMENT CONNECTIONS ==================== -->
+  <!-- Code(550,310) Tests(790,310) Specs(790,530) Context(550,530) r=42 -->
+  <!-- Code-Tests -->
+  <line x1="592" y1="310" x2="748" y2="310" class="conn-measure c1"/>
+  <!-- Code-Specs (diagonal) -->
+  <line x1="578" y1="344" x2="762" y2="496" class="conn-measure c2"/>
+  <!-- Code-Context (vertical left) -->
+  <line x1="550" y1="352" x2="550" y2="488" class="conn-measure c3"/>
+  <!-- Tests-Specs (vertical right) -->
+  <line x1="790" y1="352" x2="790" y2="488" class="conn-measure c4"/>
+  <!-- Tests-Context (diagonal) -->
+  <line x1="762" y1="344" x2="578" y2="496" class="conn-measure c5"/>
+  <!-- Specs-Context (horizontal bottom) -->
+  <line x1="748" y1="530" x2="592" y2="530" class="conn-measure c6"/>
+
+  <!-- ==================== STAGE 3: DECOHERENCE ==================== -->
+  <g id="decoherence-group">
+    <!-- Red connections to drifted Specs (790+80, 530-50 = 870, 480) -->
+    <line x1="578" y1="344" x2="848" y2="472" class="conn-red"/>
+    <line x1="790" y1="352" x2="856" y2="475" class="conn-red"/>
+    <!-- OK (dim) connections for the non-outlier pairs -->
+    <line x1="592" y1="310" x2="748" y2="310" class="conn-ok"/>
+    <line x1="550" y1="352" x2="550" y2="488" class="conn-ok"/>
+    <line x1="762" y1="344" x2="578" y2="496" class="conn-ok"/>
+    <line x1="748" y1="530" x2="592" y2="530" class="conn-ok"/>
+
+    <!-- Outlier badge — well to the right -->
+    <g class="outlier-badge" transform="translate(960, 455)">
+      <rect x="-40" y="-13" width="80" height="26" rx="13" fill="#ff4444" opacity="0.15"/>
+      <text x="0" y="5" font-size="12" fill="#ff6666" text-anchor="middle" font-weight="500">OUTLIER</text>
+    </g>
+  </g>
+
+  <!-- ==================== STAGE 4: RESOLUTION ==================== -->
+  <!-- Entirely in the left column (x: 40–420), well clear of nodes starting at x=508 -->
+  <g id="resolution-group">
+    <!-- Human/Agent icon -->
+    <g transform="translate(100, 420)">
+      <circle cx="0" cy="-22" r="15" fill="none" stroke="#aabbcc" stroke-width="1.5"/>
+      <path d="M-18,12 Q0,-3 18,12" fill="none" stroke="#aabbcc" stroke-width="1.5"/>
+      <text x="0" y="38" class="stage-sub" font-size="11">Human / Agent</text>
+    </g>
+
+    <!-- Path A: Outlier moves toward Cloud -->
+    <path d="M155,375 C230,340 330,340 410,375" class="path-a"
+      stroke="#66aadd" stroke-width="1.5" fill="none" marker-end="url(#arrowBlue)"/>
+    <text x="280" y="332" class="path-label" font-size="13">Path A: Outlier &#8594; Cloud</text>
+    <text x="280" y="350" class="path-label" font-size="10" fill="#667788">(~80% of cases)</text>
+
+    <!-- Path B: Cloud moves toward Outlier -->
+    <path d="M155,470 C230,505 330,505 410,470" class="path-b"
+      stroke="#66aadd" stroke-width="1.5" fill="none" marker-end="url(#arrowBlue)"/>
+    <text x="280" y="528" class="path-label" font-size="13">Path B: Cloud &#8594; Outlier</text>
+    <text x="280" y="546" class="path-label" font-size="10" fill="#667788">(~20% of cases)</text>
+
+    <!-- Decision indicator -->
+    <g transform="translate(100, 498)">
+      <rect x="-48" y="-12" width="96" height="24" rx="12" fill="#4488cc" opacity="0.12"/>
+      <text x="0" y="5" class="path-label" fill="#5599cc" font-size="11">Decides path</text>
+    </g>
+  </g>
+
+  <!-- ==================== STAGE 5: IMPLEMENT (green connections) ==================== -->
+  <g id="implement-group">
+    <line x1="592" y1="310" x2="748" y2="310" class="conn-green cg1"/>
+    <line x1="578" y1="344" x2="762" y2="496" class="conn-green cg2"/>
+    <line x1="550" y1="352" x2="550" y2="488" class="conn-green cg3"/>
+    <line x1="790" y1="352" x2="790" y2="488" class="conn-green cg4"/>
+    <line x1="762" y1="344" x2="578" y2="496" class="conn-green cg5"/>
+    <line x1="748" y1="530" x2="592" y2="530" class="conn-green cg6"/>
+
+    <!-- Coherent badge — centered between the 4 nodes -->
+    <g class="coherent-badge" transform="translate(670, 420)">
+      <rect x="-54" y="-15" width="108" height="30" rx="15" fill="#44dd88" opacity="0.12"/>
+      <text x="0" y="5" font-size="14" fill="#44dd88" text-anchor="middle" font-weight="400">COHERENT</text>
+    </g>
+  </g>
+
+  <!-- ==================== FOOTER ==================== -->
+  <line x1="200" y1="680" x2="900" y2="680" stroke="#1a2233" stroke-width="1"/>
+  <text x="550" y="712" font-size="11" fill="#445566" text-anchor="middle" letter-spacing="1">
+    No single source of truth — quality emerges from alignment between all artifacts telling the same story
+  </text>
+</svg>

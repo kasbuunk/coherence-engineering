@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="coherence-cycle.svg" alt="Coherence Engineering Cycle" width="900"/>
+</p>
+
 # Coherence Engineering
 
 Coherence Engineering is a software engineering practice where quality is defined as the degree of coherence between all artifacts in a system.
@@ -37,8 +41,6 @@ The practice is a continuous loop:
   │                                                     │
   └─────────────────────────────────────────────────────┘
 ```
-
-<!-- TODO: Replace with SVG animation of the coherence loop -->
 
 ### 1. Measure coherence
 
