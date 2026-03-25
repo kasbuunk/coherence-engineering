@@ -104,31 +104,33 @@
     #halo-resolve{animation:bhResolve 48s infinite}
     #halo-implement{animation:bhImplement 48s infinite}
 
-    /* ---- OBS DRIFT + STROKE (Scenario 1: drifts out 14.6-20%, returns during implement 35.4-40%) ---- */
+    /* ---- OBS DRIFT + STROKE (Scenario 1: drifts out 14.6-20%, stays out while AI
+       fixes Code/Tests/Specs, returns 39-41% as alert clears) ---- */
     @keyframes obsDrift{
       0%{transform:translate(0,0)}14.6%{transform:translate(0,0)}
-      20%{transform:translate(80px,45px)}35.4%{transform:translate(80px,45px)}
-      40%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+      20%{transform:translate(80px,45px)}39%{transform:translate(80px,45px)}
+      41%{transform:translate(0,0)}100%{transform:translate(0,0)}}
     #obs-drift{animation:obsDrift 48s infinite ease-in-out}
     @keyframes obsStroke{
       0%{stroke:#44aacc}
       14.6%{stroke:#44aacc}16%{stroke:#ff4444}25%{stroke:#ff4444}
       27%{stroke:#44aacc}
-      37%{stroke:#44aacc}39%{stroke:#44dd88}43.75%{stroke:#44dd88}
+      39%{stroke:#44aacc}41%{stroke:#44dd88}43.75%{stroke:#44dd88}
       46%{stroke:#44aacc}100%{stroke:#44aacc}}
     #obs-circle{animation:obsStroke 48s infinite}
 
-    /* ---- SPECS DRIFT + STROKE (Scenario 2: drifts out 64.6-70%, returns during implement 85.4-90%) ---- */
+    /* ---- SPECS DRIFT + STROKE (Scenario 2: drifts out 64.6-70%, stays out while AI
+       aligns Code/Tests/Obs/Context, returns 89-91% as alignment completes) ---- */
     @keyframes specsDrift{
       0%{transform:translate(0,0)}64.6%{transform:translate(0,0)}
-      70%{transform:translate(-85px,-45px)}85.4%{transform:translate(-85px,-45px)}
-      90%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+      70%{transform:translate(-85px,-45px)}89%{transform:translate(-85px,-45px)}
+      91%{transform:translate(0,0)}100%{transform:translate(0,0)}}
     #specs-drift{animation:specsDrift 48s infinite ease-in-out}
     @keyframes specsStroke{
       0%{stroke:#cc8844}
       64.6%{stroke:#cc8844}66%{stroke:#ff4444}75%{stroke:#ff4444}
       77%{stroke:#cc8844}
-      87%{stroke:#cc8844}89%{stroke:#44dd88}93.75%{stroke:#44dd88}
+      89%{stroke:#cc8844}91%{stroke:#44dd88}93.75%{stroke:#44dd88}
       96%{stroke:#cc8844}100%{stroke:#cc8844}}
     #specs-circle{animation:specsStroke 48s infinite}
 
@@ -167,11 +169,11 @@
       0%{opacity:0}76%{opacity:0}77%{opacity:1}84%{opacity:1}85.4%{opacity:0}100%{opacity:0}}
     #resolution-sc2{animation:resolutionShow2 48s infinite}
 
-    /* ---- IMPLEMENT (both scenarios — green connections appear after node returns) ---- */
+    /* ---- IMPLEMENT (both scenarios — green connections appear after outlier returns) ---- */
     @keyframes implementShow{
       0%{opacity:0}
-      39.5%{opacity:0}40.5%{opacity:1}42.5%{opacity:1}43.75%{opacity:0}
-      89.5%{opacity:0}90.5%{opacity:1}92.5%{opacity:1}93.75%{opacity:0}
+      40.5%{opacity:0}41.5%{opacity:1}42.5%{opacity:1}43.75%{opacity:0}
+      90.5%{opacity:0}91.5%{opacity:1}92.5%{opacity:1}93.75%{opacity:0}
       100%{opacity:0}}
     #implement-group{animation:implementShow 48s infinite}
     .conn-green{stroke:#44dd88;stroke-width:2;fill:none}
@@ -412,11 +414,6 @@
       <text x="609" y="483" class="node-icon" font-size="16" fill="#44aacc">&#9678;</text>
       <text x="642" y="510" class="node-label" text-anchor="start">Observability</text>
     </g>
-    <g id="ai-working-sc1" opacity="0">
-      <text class="ai-spark" x="581" y="462" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
-      <text class="ai-spark" x="637" y="498" font-size="8" fill="#66aadd" text-anchor="middle" style="animation-delay:0.3s">&#10024;</text>
-      <text class="ai-spark" x="600" y="508" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.5s">&#10024;</text>
-    </g>
   </g>
 
   <!-- Context — bottom-left -->
@@ -433,11 +430,21 @@
       <text x="460" y="377" class="node-icon" font-size="16" fill="#cc8844">&#9776;</text>
       <text x="428" y="404" class="node-label" text-anchor="end">Specs</text>
     </g>
-    <g id="ai-working-sc2" opacity="0">
-      <text class="ai-spark" x="432" y="358" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
-      <text class="ai-spark" x="488" y="390" font-size="8" fill="#66aadd" text-anchor="middle" style="animation-delay:0.3s">&#10024;</text>
-      <text class="ai-spark" x="450" y="402" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.5s">&#10024;</text>
-    </g>
+  </g>
+
+  <!-- AI working sparkles SC1: near Code, Tests, Specs (AI fixes these; Obs stays drifted) -->
+  <g id="ai-working-sc1" opacity="0">
+    <text class="ai-spark" x="565" y="290" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+    <text class="ai-spark" x="658" y="358" font-size="9" fill="#66aadd" text-anchor="middle" style="animation-delay:0.25s">&#10024;</text>
+    <text class="ai-spark" x="443" y="358" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.5s">&#10024;</text>
+  </g>
+
+  <!-- AI working sparkles SC2: near Code, Tests, Obs, Context (AI aligns these; Specs stays drifted) -->
+  <g id="ai-working-sc2" opacity="0">
+    <text class="ai-spark" x="565" y="290" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
+    <text class="ai-spark" x="658" y="358" font-size="9" fill="#66aadd" text-anchor="middle" style="animation-delay:0.2s">&#10024;</text>
+    <text class="ai-spark" x="626" y="462" font-size="10" fill="#4488cc" text-anchor="middle" style="animation-delay:0.4s">&#10024;</text>
+    <text class="ai-spark" x="474" y="462" font-size="9" fill="#66aadd" text-anchor="middle" style="animation-delay:0.6s">&#10024;</text>
   </g>
 
   <!-- ==================== RESOLUTION SC1 (below Resolve badge) ==================== -->
