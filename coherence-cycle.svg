@@ -13,7 +13,7 @@
 
   <style>
     /* 48s loop — two scenarios, each 24s
-       Scenario 1 (0-24s): Observability decoherence (alert fired)
+       Scenario 1 (0-24s): Observability incoherence (alert fired)
        Scenario 2 (24-48s): Spec changed (new requirements)
 
        Phase timing per scenario:
@@ -144,15 +144,15 @@
     .conn-measure{stroke:#4488cc;stroke-width:1.5;fill:none;stroke-dasharray:6 4;
       animation:connMeasure 48s infinite,dashPulse 0.8s linear infinite}
 
-    /* ---- DECOHERENCE SC1: Obs drifts (14.6-25%) ---- */
-    @keyframes decoherenceShow1{
+    /* ---- INCOHERENCE SC1: Obs drifts (14.6-25%) ---- */
+    @keyframes incoherenceShow1{
       0%{opacity:0}16%{opacity:0}17%{opacity:1}23%{opacity:1}25%{opacity:0}100%{opacity:0}}
-    #decoherence-sc1{animation:decoherenceShow1 48s infinite}
+    #incoherence-sc1{animation:incoherenceShow1 48s infinite}
 
-    /* ---- DECOHERENCE SC2: Specs drifts (64.6-75%) ---- */
-    @keyframes decoherenceShow2{
+    /* ---- INCOHERENCE SC2: Specs drifts (64.6-75%) ---- */
+    @keyframes incoherenceShow2{
       0%{opacity:0}66%{opacity:0}67%{opacity:1}73%{opacity:1}75%{opacity:0}100%{opacity:0}}
-    #decoherence-sc2{animation:decoherenceShow2 48s infinite}
+    #incoherence-sc2{animation:incoherenceShow2 48s infinite}
 
     .conn-red{stroke:#ff4444;stroke-width:2;fill:none;stroke-dasharray:6 4;animation:dashPulse 0.5s linear infinite}
     .conn-ok{stroke:#4488cc;stroke-width:1.5;fill:none;opacity:0.25}
@@ -316,7 +316,7 @@
   <g id="badge-detect" transform="translate(810,400)">
     <rect x="-100" y="-16" width="200" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
     <text x="-82" y="5" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
-    <text x="12" y="5" font-size="11" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1">ANALYSE DECOHERENCE</text>
+    <text x="12" y="5" font-size="11" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1">ANALYSE INCOHERENCE</text>
   </g>
   <g id="badge-resolve" transform="translate(550,605)">
     <rect x="-50" y="-16" width="100" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
@@ -327,7 +327,7 @@
   <g id="badge-implement" transform="translate(290,400)">
     <rect x="-95" y="-16" width="190" height="32" rx="16" fill="#4488cc" fill-opacity="0.12" stroke="#4488cc" stroke-width="1.5"/>
     <text x="-78" y="5" font-size="11" fill="#4488cc" text-anchor="middle">&#10024;</text>
-    <text x="12" y="5" font-size="11" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1">RESOLVE DECOHERENCE</text>
+    <text x="12" y="5" font-size="11" fill="#fff" text-anchor="middle" font-weight="500" letter-spacing="1">RESOLVE INCOHERENCE</text>
   </g>
 
   <!-- ==================== CONNECTIONS (below nodes) ==================== -->
@@ -344,8 +344,8 @@
   <line x1="609" y1="477" x2="460" y2="371" class="conn-measure"/>
   <line x1="491" y1="477" x2="460" y2="371" class="conn-measure"/>
 
-  <!-- Decoherence SC1: Obs drifts to ~(689,522) — red to Obs, ok between others -->
-  <g id="decoherence-sc1">
+  <!-- Incoherence SC1: Obs drifts to ~(689,522) — red to Obs, ok between others -->
+  <g id="incoherence-sc1">
     <line x1="550" y1="305" x2="689" y2="522" class="conn-red"/>
     <line x1="640" y1="371" x2="689" y2="522" class="conn-red"/>
     <line x1="550" y1="305" x2="640" y2="371" class="conn-ok"/>
@@ -357,8 +357,8 @@
     </g>
   </g>
 
-  <!-- Decoherence SC2: Specs drifts to ~(375,326) — red to Specs, ok between others -->
-  <g id="decoherence-sc2">
+  <!-- Incoherence SC2: Specs drifts to ~(375,326) — red to Specs, ok between others -->
+  <g id="incoherence-sc2">
     <line x1="550" y1="305" x2="375" y2="326" class="conn-red"/>
     <line x1="491" y1="477" x2="375" y2="326" class="conn-red"/>
     <line x1="550" y1="305" x2="640" y2="371" class="conn-ok"/>
